@@ -8,4 +8,50 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
+# Problem Context
+Every Saturday morning, at the same time, a primatologist goes and sits in the forest to listen for titi monkey calls, counting the number of calls they hear in a 2 hour window from 5am to 7am. Based on previous knowledge, she believes that the mean number of calls she will hear in that time is exactly 15. Let X represent the appropriate Poisson random variable of the number of calls heard in each monitoring session.
+
+
+# What is the probability that she will hear more than 8 calls during any given session?
+```{r, 8_calls}
+ppois(7, lambda= 15, lower = FALSE) #cumulative probability, upper tail(lower is then False so that it is 8 or more) #need 8 to be 7 because it is 8 or more
+#takes 
+#I am a little confused why this probability is so high? Maybe it is related to mean curve?
+1- ppois(q= 7, lambda= 15) #this also does the same thing
+```
+
+# What is the probability that she will hear no calls in a session?
+```{r, no_calls}
+dbinom(x = 0, size = 6, prob = 1/6)
+dpois(0, 15, log = FALSE) #dpois 
+#prob of 3 calls or one point
+```
+
+# What is the probability that she will hear exactly 3 calls in a session?
+```{r, 3_calls}
+dbinom(x = 3, size = 6, prob = 1/6)
+dpois(3, 15, log = FALSE)
+```
+
+# Plot the relevant Poisson mass function over the values in range 0 ≤ x ≤ 30.
+```{r, pmf}
+x <- 0:30
+lambda = 15
+probset <- dpois(x = x, lambda = lambda)
+barplot(probset, names.arg = x, space = 0, xlab = "Numbers of Calls ", ylab = "Pr(X = x)", main = "Poisson Mass Function")
+```
+
+# Simulate 104 results from this distribution (i.e., 2 years of Saturday monitoring sessions).
+```{r, randomized_results}
+#set up population
+set.seed(1)
+Sat_mon <- rpois(104, 15)#number of samples, lambda(poisson stats have weird SDs so they don't include it in the )
+Sat_mon
+```
+
+# Plot the simulated results using hist() and use xlim() to set the horizontal limits to be from 0 to 30. How does your histogram compare to the shape of the probability mass function you plotted above?
+```{r, histogram}
+hist(Sat_mon, xlim = c(0,30), probability = TRUE, main = "Saturday Monitoring Calls Over 2 Years",
+    xlab = "Calls during Monitoring", ylab = "Probability")
+```
 
