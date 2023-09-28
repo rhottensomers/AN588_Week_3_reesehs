@@ -2,8 +2,14 @@
 title: "reesehs_OriginalHomeworkCode_02"
 author: "Reese Hotten-Somers"
 date: "2023-09-27"
-output: html_document
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+#in order to understand how to use the cayman theme I used: https://cran.r-project.org/web/packages/prettydoc/vignettes/cayman.html
+
 ---
+
+![Here is my favorite picture of a Titi Monkey! I thought that this individual had an interesting coat color!](Titi Monkey.jpeg)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
