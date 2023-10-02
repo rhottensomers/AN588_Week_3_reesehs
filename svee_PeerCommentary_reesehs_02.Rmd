@@ -1,0 +1,89 @@
+---
+title: "reesehs_OriginalHomeworkCode_02"
+author: "Reese Hotten-Somers"
+date: "2023-09-28"
+output:
+  prettydoc::html_pretty:
+    theme: cayman
+#in order to understand how to use the cayman theme I used: https://cran.r-project.org/web/packages/prettydoc/vignettes/cayman.html
+
+---
+
+![Here is my favorite picture of a Titi Monkey! I thought that this individual had an interesting coat color!](Titi Monkey.jpeg)
+```{r, picture function explanation, include=FALSE}
+#This adds in a picture that is downloaded in my computer
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+# Problem Context
+
+Every Saturday morning, at the same time, a primatologist goes and sits in the forest to listen for titi monkey calls, counting the number of calls they hear in a 2 hour window from 5am to 7am. Based on previous knowledge, she believes that the mean number of calls she will hear in that time is exactly 15. Let X represent the appropriate Poisson random variable of the number of calls heard in each monitoring session.
+
+
+
+# What is the probability that she will hear more than 8 calls during any given session?
+```{r, 8_calls}
+ppois(7, lambda= 15, lower = FALSE) #ppois finds the cumulative probability so it is used in this context because more than one probability point is need 
+#also instead of using 8 as the q value I used 7 because the question is asking for MORE THAN
+
+1- ppois(q= 7, lambda= 15) #this also does the same thing as the above function 
+```
+
+# What is the probability that she will hear no calls in a session?
+```{r, no_calls}
+dpois(0, 15, log = FALSE) #dpois finds probability density at a certain point thus it was used to calculate the probability at 0 calls, this is also not in log for(hence log = FALSE), mean/lambda = 15
+#I am not quite sure if this is how I am supposed to do this one or if I got the right answer?
+```
+
+# What is the probability that she will hear exactly 3 calls in a session?
+```{r, 3_calls}
+dpois(3, 15, log = FALSE)#finds probability for 3 using mean of 15 and not given as log
+```
+
+# Plot the relevant Poisson mass function over the values in range 0 ≤ x ≤ 30.
+```{r, pmf}
+x <- 0:30 #sets range
+lambda = 15 #sets mean or lambda as the previously determined mean of 15 
+probset <- dpois(x = x, lambda = lambda) #finds density probability using range and mean and assigns it to variable probset
+barplot(probset, names.arg = x, space = 0, xlab = "Numbers of Calls ", ylab = "Pr(X = x)", main = "Probability Mass Function") #plots probability mass function of the poisson distribution using the mean/lambda and range
+```
+
+# Simulate 104 results from this distribution (i.e., 2 years of Saturday monitoring sessions).
+```{r, randomized_results}
+set.seed(1)#set up randomized sample set
+Sat_mon <- rpois(104, 15)#number of samples, lambda(poisson stats have weird SDs so they don't include it in the ) and generates random numbers given the deviation
+Sat_mon
+#I initially was confusing myself by using rnorm function but they I was asking Jimmy about what the standard deviation would be and he let me know that I should really be using rpois instead since the data set is using poisson functions/data. So big thank yous to Jimmy they are the best!!
+```
+
+# Plot the simulated results using hist() and use xlim() to set the horizontal limits to be from 0 to 30. How does your histogram compare to the shape of the probability mass function you plotted above?
+```{r, histogram}
+hist(Sat_mon, xlim = c(0,30), probability = TRUE, main = "Saturday Monitoring Calls Over 2 Years",
+    xlab = "Calls during Monitoring", ylab = "Probability") #creates histogram using randomized data from above question(Sat_Mon variable) and plots the probability of each value occurring. Graph has horizontal limits of 0-> 30(xlim is assigned to the range vector)
+```
+
+This histogram is quite different from the original probability mass function. The highest number of probabilities are no longer clustered around the mean of 15 and descend in a 'bell curve' shape. Instead it is more erratic. 
+
+## Five Challenges faced
+
+1. Initially I struggled with translating what was presented to me in the modules into something that could be used with poisson variables(given that we only had lambda and no other numbers) but once I was told by Jimmy and another class member that pois versions of the binomial functions that were used I was able to manipulate and figure out the problems pretty easily
+
+2. The difference between dpois and ppois was a bit confusing to me before it was explained graphically. Understanding that ppois takes into account many points and dpois is used when looking at just one point was very helpful.
+
+3. Finding the probability that there would be no calls threw me for a little bit of a loop because the number was small but when I looked at the histogram it became more clear why it would not be very probable that no calls would occur during the observation time. 
+
+4. As described in my comments above I was quite confused on how to create a randomized data set using poisson variables however, Jimmy was very nice and explained to me that(as far as I'm concerned) poisson has variance but standard deviation is very weird for it. I was trying to get the standard deviation for the data in order to get a randonmized set from rnorm. But like the rest of the functions rnorm has a poisson equivalent rpois, imagine that!
+
+5. Figuring out how to use xlim was a little confusing. I didn't realize that the range had to be inputted into a vector. 
+
+## Peer commentary from Sam
+Great job!! Overall, your code and knitted file look great. Love the titi monkey picture. Everything is well annotated and I appreciated the fact that you included a link that explained how to get the cayman theme (something I initially had trouble with). Here are some more specific comments/suggestions I have below: <br><br>
+1. Each question currently has a Header 1 format but I believe the homework prompt said to use a Header 2 prompt for each question! I would just add an extra hashtag to each section <br><br>
+2. For the first question, why did you include the "lower = FALSE" argument? It would be helpful to include a comment addressing this! <br><br>
+3. Not really a suggestion but I noticed that for question 2, you used dpois while I used ppois. Is there a particular reason you chose one over the other? I'll have to go back to my own code to remember why I did what I did.
+
